@@ -6,15 +6,17 @@ export default function Login() {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
+  const [loading, setLoading] = useState(false);
   const nav = useNavigate();
   const { login } = useAuth();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError('');
+    setLoading(true);
 
     try {
-      await login(username, password); // llama a /auth/login
+      await login(username, password);
       nav('/dashboard');
     } catch (err) {
       console.error('Error en login:', err);
@@ -22,39 +24,78 @@ export default function Login() {
         err.response?.data?.message ||
         'Error al iniciar sesión. Revisa usuario o contraseña.';
       setError(Array.isArray(msg) ? msg.join(', ') : msg);
+    } finally {
+      setLoading(false);
     }
   };
 
   return (
-    <div style={{ maxWidth: 350, margin: '4rem auto', fontFamily: 'sans-serif' }}>
-      <h2>Ingreso Administración</h2>
+    <div className="page-container">
+      <div className="page-content fade-in">
+        <div className="card" style={{ maxWidth: '400px', margin: '0 auto' }}>
+          <div className="text-center mb-3">
+            <div style={{ fontSize: '3rem', marginBottom: '1rem' }}>🔐</div>
+            <h2>Ingreso Administración</h2>
+            <p style={{ color: 'var(--text-secondary)' }}>
+              Accede al panel administrativo
+            </p>
+          </div>
 
-      <form
-        onSubmit={handleSubmit}
-        style={{ display: 'flex', flexDirection: 'column', gap: '.5rem', marginBottom: '1rem' }}
-      >
-        <input
-          value={username}
-          onChange={(e) => setUsername(e.target.value)}
-          placeholder="Usuario"
-        />
-        <input
-          type="password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          placeholder="Contraseña"
-        />
-        <button type="submit">Entrar</button>
-      </form>
+          <form onSubmit={handleSubmit}>
+            <div className="form-group">
+              <label htmlFor="username">Usuario</label>
+              <input
+                id="username"
+                type="text"
+                value={username}
+                onChange={(e) => setUsername(e.target.value)}
+                placeholder="Ingresa tu usuario"
+                required
+              />
+            </div>
 
-      {error && <p style={{ color: 'red' }}>{error}</p>}
+            <div className="form-group">
+              <label htmlFor="password">Contraseña</label>
+              <input
+                id="password"
+                type="password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                placeholder="Ingresa tu contraseña"
+                required
+              />
+            </div>
 
-      <p>
-        ¿No tienes cuenta? <Link to="/register">Regístrate</Link>
-      </p>
-      <p style={{ marginTop: '1rem' }}>
-        <Link to="/">Volver al inicio</Link>
-      </p>
+            {error && (
+              <div className="status-message status-error">
+                {error}
+              </div>
+            )}
+
+            <button
+              type="submit"
+              disabled={loading}
+              style={{ width: '100%', marginBottom: '1rem' }}
+            >
+              <span>{loading ? 'Ingresando...' : 'Iniciar Sesión'}</span>
+            </button>
+          </form>
+
+          <div className="text-center">
+            <p style={{ marginBottom: '0.5rem' }}>
+              ¿No tienes cuenta?{' '}
+              <Link to="/register" style={{ color: 'var(--primary-color)' }}>
+                Regístrate
+              </Link>
+            </p>
+            <p>
+              <Link to="/" style={{ color: 'var(--text-secondary)' }}>
+                ← Volver al inicio
+              </Link>
+            </p>
+          </div>
+        </div>
+      </div>
     </div>
   );
 }

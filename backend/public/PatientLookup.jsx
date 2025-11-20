@@ -16,9 +16,9 @@ export default function PatientLookup() {
       <div className="page-content fade-in">
         <div className="card" style={{ maxWidth: '500px', margin: '0 auto' }}>
           <div className="text-center mb-3">
-            <div style={{ fontSize: '4rem', marginBottom: '1.5rem' }}>🔍</div>
+            <div style={{ fontSize: '3rem', marginBottom: '1rem' }}>🔍</div>
             <h2>Ingreso de Pacientes</h2>
-            <p style={{ color: 'var(--text-secondary)', fontSize: '1.125rem' }}>
+            <p style={{ color: 'var(--text-secondary)' }}>
               Ingresa tu RUT para acceder a tu información médica y carnet virtual
             </p>
           </div>
@@ -43,7 +43,7 @@ export default function PatientLookup() {
 
             <button
               type="submit"
-              style={{ width: '100%', marginBottom: '1rem', minWidth: '200px' }}
+              style={{ width: '100%', marginBottom: '1rem' }}
             >
               <span>Buscar Paciente</span>
             </button>
